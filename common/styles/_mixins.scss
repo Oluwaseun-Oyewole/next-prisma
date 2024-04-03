@@ -1,0 +1,8 @@
+@import "./variables";
+
+@mixin flexStyles($direction) {
+  display: flex;
+  align-items: center;
+  flex-direction: $direction;
+  background-color: $primary-color;
+}
