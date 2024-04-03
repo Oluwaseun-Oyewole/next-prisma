@@ -42,8 +42,6 @@ export default function Home() {
   //   return <p>Invalid search Params {searchParamObject.query}</p>;
   // }
 
-  console.log("posts", posts);
-
   return (
     <main className="flex min-h-screen flex-col items-center justify-center">
       <p>Total posts - {posts?.length}</p>
@@ -63,18 +61,6 @@ export default function Home() {
                 </p>
               );
             })} */}
-
-          {posts.length > 0 &&
-            posts?.map((post: Post) => {
-              return (
-                <div key={post?.id}>
-                  <div className="flex gap-2">
-                    {"Title"}: <p>{post?.title}</p>
-                    {"Content"}: <p>{post?.content}</p>
-                  </div>
-                </div>
-              );
-            })}
         </div>
       )}
 

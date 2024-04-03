@@ -2,7 +2,7 @@
 import { Button } from "@/common/components/button/button.components";
 import { Form, Formik } from "formik";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useLayoutEffect } from "react";
 
 import FormikController from "@/common/components/formik";
@@ -16,7 +16,6 @@ import "../../../common/styles/styles.module.scss";
 
 const SignUp = () => {
   const router = useRouter();
-  const pathname = usePathname();
   useLayoutEffect(() => {
     if (window && typeof window !== undefined) {
       router.replace("/auth/register");
@@ -32,14 +31,11 @@ const SignUp = () => {
         method: "POST",
         body: JSON.stringify({ ...values }),
       });
-
-      console.log("response", response);
       if (response?.status === 200) {
         Toastify.success("Passed");
         resetForm({});
       }
     } catch (error) {
-      console.log("error", error);
       Toastify.error("failed");
     }
   };
