@@ -30,14 +30,10 @@ export const options: NextAuthOptions = {
         } catch (error) {
           throw new Error(error as string);
         }
-
         return response.rows[0].email;
       },
     }),
   ],
-  pages: {
-    // signIn: "/auth/login",
-  },
 
   session: { strategy: "jwt" },
   secret: process.env.NEXTAUTH_SECRET,

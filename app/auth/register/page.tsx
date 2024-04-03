@@ -98,7 +98,6 @@ const SignUp = () => {
                 <Button
                   disabled={!formik.isValid}
                   className={`!mt-5 !disabled:cursor-not-allowed`}
-                  // variant="primary"
                 >
                   Submit
                 </Button>
