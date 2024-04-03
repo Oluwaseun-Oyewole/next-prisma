@@ -1,5 +1,6 @@
 "use client";
 import classNames from "classnames";
+import { ErrorMessage } from "formik";
 import {
   DetailedHTMLProps,
   InputHTMLAttributes,
@@ -7,6 +8,7 @@ import {
   forwardRef,
   useState,
 } from "react";
+import FormError from "./error.components";
 
 type InputType =
   | "text"
@@ -57,7 +59,7 @@ const Input = (
   const [textType, ,] = useState(type);
 
   return (
-    <div className="flex relative">
+    <div className="relative">
       <input
         ref={ref}
         type={textType}
@@ -69,11 +71,17 @@ const Input = (
         onChange={onChange}
         autoComplete="off"
         className={classNames(
-          `w-full block px-10 outline-none bg-secondary text-white rounded-sm font-medium  placeholder:font-medium placeholder:text-sm`,
+          `w-full block border-2 border-gray-300 px-10 text-white rounded-sm font-medium placeholder:font-medium placeholder:text-sm`,
           sizeMap[size],
           className
         )}
         {...props}
+      />
+
+      <ErrorMessage
+        name={name as string}
+        // eslint-disable-next-line react/no-children-prop
+        children={(msg) => <FormError error={msg} />}
       />
     </div>
   );

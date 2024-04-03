@@ -1,49 +1,20 @@
 "use client";
 import { Button } from "@/common/components/button/button.components";
-import { Form, Formik } from "formik";
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { useLayoutEffect } from "react";
-
-import FormikController from "@/common/components/formik";
+import InputComponent from "@/common/components/input/input.component";
 import {
   RegisterFormValues,
   registerValidationSchema,
 } from "@/lib/schemas/register";
 import { Toastify } from "@/lib/toast";
+import { Form, Formik } from "formik";
+import { signIn } from "next-auth/react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ZodError } from "zod";
 import "../../../common/styles/styles.module.scss";
 
-const SignUp = () => {
+const Login = () => {
   const router = useRouter();
-  const pathname = usePathname();
-  useLayoutEffect(() => {
-    if (window && typeof window !== undefined) {
-      router.replace("/auth/register");
-    }
-  }, []);
-
-  const handleSubmit = async (
-    values: RegisterFormValues,
-    { resetForm }: any
-  ) => {
-    try {
-      const response = await fetch("/api/auth/register", {
-        method: "POST",
-        body: JSON.stringify({ ...values }),
-      });
-
-      console.log("response", response);
-      if (response?.status === 200) {
-        Toastify.success("Passed");
-        resetForm({});
-      }
-    } catch (error) {
-      console.log("error", error);
-      Toastify.error("failed");
-    }
-  };
-
   const validateForm = (values: RegisterFormValues) => {
     try {
       registerValidationSchema.parse(values);
@@ -54,9 +25,28 @@ const SignUp = () => {
     }
   };
 
+  const handleSubmit = async (
+    values: Record<string, any>,
+    { resetForm }: any
+  ) => {
+    try {
+      const res = await signIn("credentials", {
+        email: values.email,
+        password: values.password,
+        redirect: false,
+      });
+      if (res?.status === 200) {
+        router.replace("/");
+      }
+      Toastify.error(res?.error as string);
+    } catch (error) {
+      Toastify.error("Something went wrong");
+    }
+  };
+
   return (
     <div className="w-full flex flex-col gap-4 items-center justify-center !font-light mt-20 lg:mt-14">
-      <h1 className="text-center">Registration</h1>
+      <h1>Login</h1>
       <div className="w-[85%] lg:w-[40%]">
         <Formik
           initialValues={{
@@ -65,32 +55,28 @@ const SignUp = () => {
           }}
           validate={validateForm}
           onSubmit={handleSubmit}
-          validateOnChange
-          validateOnMount
         >
           {(formik) => {
             return (
               <Form>
-                <FormikController
-                  control="input"
-                  type="email"
-                  placeholder="Email"
-                  name="email"
-                  value={formik.values.email}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  className="py-[15px]"
-                />
-
                 <div className="flex flex-col gap-5">
-                  <FormikController
-                    control="input"
+                  <InputComponent
+                    type="email"
+                    placeholder="Email"
+                    name="email"
+                    value={formik.values.email}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    className="py-[15px]"
+                  />
+
+                  <InputComponent
                     type="password"
-                    placeholder="Password"
                     name="password"
                     value={formik.values.password}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
+                    placeholder="Password"
                     className="py-[15px]"
                   />
                 </div>
@@ -118,4 +104,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default Login;

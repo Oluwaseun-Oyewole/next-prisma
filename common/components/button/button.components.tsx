@@ -1,39 +1,51 @@
+// import classNames from "classnames";
+// import type { ButtonHTMLAttributes, FC } from "react";
+
+// type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+//   variant?: "primary" | "danger" | "success";
+// };
+
+// const Button: FC<ButtonProps> = ({
+//   children,
+//   variant = "primary",
+//   className,
+//   ...props
+// }) => {
+//   return (
+//     <button
+//       className={classNames(
+//         className,
+//         "text-white fill-white stroke-white hover:opacity-90 active:opacity-75 disabled:opacity-50 bg-red-500",
+//         { "hidden bg-red-500": variant === "primary" }
+//       )}
+//       {...props}
+//     >
+//       {children}
+//     </button>
+//   );
+// };
+
+// export { Button };
+
 import classNames from "classnames";
-import type { ButtonHTMLAttributes, FC } from "react";
+import { ButtonHTMLAttributes } from "react";
 
-type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: "primary" | "danger" | "success";
-  rounded?: boolean;
-};
+type IProps = { isLoading?: boolean } & ButtonHTMLAttributes<HTMLButtonElement>;
 
-const Button: FC<ButtonProps> = ({
-  children,
-  variant = "primary",
-  rounded,
-  className,
-  ...props
-}) => {
+function Button({ children, className, isLoading = false, ...rest }: IProps) {
   return (
     <button
-      {...props}
+      {...rest}
       className={classNames(
-        className,
-        "text-white fill-white stroke-white hover:opacity-90 active:opacity-75 disabled:opacity-50",
-        {
-          "bg-blue-400": variant === "primary",
-          "bg-red-300": variant === "danger",
-          "bg-green-500": variant === "success",
-          "rounded-md": !rounded,
-          "py-2": !rounded,
-          "px-2": !rounded,
-          "p-3 rounded-full leading-4 flex justify-center content-center items-center justify-items-center":
-            rounded,
-        }
+        `py-[15px] px-[8px] rounded-[5px] bg-btn text-white w-full disabled:opacity-50 disabled:cursor-not-allowed gap-4 ${
+          isLoading && "flex items-center justify-center gap-3"
+        } `,
+        className
       )}
     >
-      {children}
+      {children} {isLoading && <p>Loading....</p>}
     </button>
   );
-};
+}
 
 export { Button };
