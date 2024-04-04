@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Toaster } from "react-hot-toast";
 import { poppins } from "./fonts";
 import "./globals.scss";
+import Provider from "./provider/layout";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,7 +17,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={poppins.className}>
-        {children} <Toaster position="top-center" />
+        <Provider>{children} </Provider>
+        <Toaster position="top-center" />
       </body>
     </html>
   );

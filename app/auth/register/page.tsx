@@ -27,12 +27,13 @@ const SignUp = () => {
     { resetForm }: any
   ) => {
     try {
-      const response = await fetch("/api/auth/register", {
+      const response: any = await fetch("/api/auth/register", {
         method: "POST",
         body: JSON.stringify({ ...values }),
       });
+      console.log("resp", response);
       if (response?.status === 200) {
-        Toastify.success("Passed");
+        Toastify.success(response?.data.message);
         resetForm({});
       }
     } catch (error) {
@@ -58,6 +59,7 @@ const SignUp = () => {
           initialValues={{
             email: "",
             password: "",
+            name: "",
           }}
           validate={validateForm}
           onSubmit={handleSubmit}
@@ -67,6 +69,17 @@ const SignUp = () => {
           {(formik) => {
             return (
               <Form>
+                <FormikController
+                  control="input"
+                  type="text"
+                  placeholder="Name"
+                  name="name"
+                  value={formik.values.name}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  className="py-[15px]"
+                />
+
                 <FormikController
                   control="input"
                   type="email"

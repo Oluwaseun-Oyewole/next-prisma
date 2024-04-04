@@ -67,6 +67,7 @@ export default function Home() {
       <div className="flex gap-2 mt-5">
         <Link href="/auth/login">login</Link>
         <Link href="/auth/register">register</Link>
+        <Link href="/settings">settings</Link>
       </div>
     </main>
   );

@@ -1,13 +1,9 @@
 "use client";
 import { Button } from "@/common/components/button/button.components";
 import InputComponent from "@/common/components/input/input.component";
-import {
-  RegisterFormValues,
-  registerValidationSchema,
-} from "@/lib/schemas/register";
+import { LoginFormValues, loginValidationSchema } from "@/lib/schemas/register";
 import { Toastify } from "@/lib/toast";
 import { Form, Formik } from "formik";
-import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ZodError } from "zod";
@@ -15,9 +11,9 @@ import "../../../common/styles/styles.module.scss";
 
 const Login = () => {
   const router = useRouter();
-  const validateForm = (values: RegisterFormValues) => {
+  const validateForm = (values: LoginFormValues) => {
     try {
-      registerValidationSchema.parse(values);
+      loginValidationSchema.parse(values);
     } catch (error) {
       if (error instanceof ZodError) {
         return error.formErrors.fieldErrors;
@@ -25,20 +21,17 @@ const Login = () => {
     }
   };
 
-  const handleSubmit = async (
-    values: Record<string, any>,
-    { resetForm }: any
-  ) => {
+  const handleSubmit = async (values: LoginFormValues, { resetForm }: any) => {
     try {
-      const res = await signIn("credentials", {
-        email: values.email,
-        password: values.password,
-        redirect: false,
+      console.log("trying to test submit function ");
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        body: JSON.stringify({ ...values }),
       });
       if (res?.status === 200) {
-        router.replace("/");
+        router.replace("/settings");
       }
-      Toastify.error(res?.error as string);
+      // Toastify.error(res?.error as string);
     } catch (error) {
       Toastify.error("Something went wrong");
     }
